@@ -2,6 +2,7 @@ import argparse
 import concurrent.futures
 import glob
 import logging
+from file_parser.file_parser import FileParser
 
 # TODO: Specify log levels
 # TODO: Documentation
@@ -59,9 +60,8 @@ def main():
             logging.debug(f"Temporary results for {json_file} stored at {work_csv_file}")
 
 def parse_file(file_location):
-    logging.debug(f"Parsing file: {file_location}")
-    print("foo!")
-    return "somefile"
+    fp = FileParser()
+    fp.parse_file(file_location)
 
 if __name__ == "__main__":
     main()

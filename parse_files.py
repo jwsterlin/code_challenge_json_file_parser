@@ -9,6 +9,10 @@ from file_parser.file_parser import FileParser
 # TODO: Unit tests
 # TODO: Build scripts
 # TODO: Try invalid values for all inputs
+# TODO: Try invalid lines/values in input files
+# TODO: Try special characters in input files
+# TODO: List assumptions in readme
+    # Assume space before Doe not intended, or " Doe" was specified in file
 
 DEFAULT_WORK_DIR = "work_dir"
 DEFAULT_LOG_LOCATION = "parse_files.log"
@@ -59,9 +63,9 @@ def main():
         for json_file, work_csv_file in zip(json_files, executor.map(parse_file, json_files)):
             logging.debug(f"Temporary results for {json_file} stored at {work_csv_file}")
 
-def parse_file(file_location):
+def parse_file(input_file_location, output_file_location):
     fp = FileParser()
-    fp.parse_file(file_location)
+    fp.parse_file(input_file_location, output_file_location)
 
 if __name__ == "__main__":
     main()

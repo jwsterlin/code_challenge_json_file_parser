@@ -20,6 +20,7 @@ from file_parser.file_parser import FileParser
     # Assume space before Doe not intended, or " Doe" was specified in file
     # Invalid data in any column invalidates the entire row
     # Assume no header, per example
+    # Assume trailing newline is unacceptable
 
 DEFAULT_WORK_DIR = "work_dir"
 DEFAULT_LOG_LOCATION = "parse_files.log"

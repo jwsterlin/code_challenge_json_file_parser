@@ -20,24 +20,16 @@ from file_parser.file_parser import FileParser
     # Assume space before Doe not intended, or " Doe" was specified in file
     # Invalid data in any column invalidates the entire row
     # Assume no header, per example
-    # Assume trailing newline is unacceptable
+    # Assume trailing newline is unacceptable (more processing required)
+    # Assume total input size ~ several GB to tens of GB.  Recommend trying golang as we move toward terabyte scale.
 
 DEFAULT_WORK_DIR = "work_dir"
 DEFAULT_LOG_LOCATION = "parse_files.log"
-DEFAULT_NUM_THREADS = 4
 DEFAULT_LOG_LEVEL = "INFO"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input_dir", required=True, help="Location of a directory that contains JSON files to be parsed.")
 parser.add_argument("-o", "--output_file", required=True, help="Output file location where CSV results will be stored.")
-parser.add_argument(
-    "-t",
-    "--num_threads",
-    required=False,
-    default=DEFAULT_NUM_THREADS,
-    type=int,
-    help=f"Number of concurrent threads to use.  Defaults to {DEFAULT_NUM_THREADS}."
-)
 parser.add_argument(
     "--log_location",
     required=False,

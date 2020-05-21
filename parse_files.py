@@ -2,17 +2,22 @@ import argparse
 import concurrent.futures
 import glob
 import logging
+import os
+import sys
+
 from file_parser.file_parser import FileParser
 
-# TODO: Specify log levels
 # TODO: Documentation
 # TODO: Unit tests
 # TODO: Build scripts
 # TODO: Try invalid values for all inputs
 # TODO: Try invalid lines/values in input files
 # TODO: Try special characters in input files
+# TODO: Check all exit codes
+# TODO: Add CSV header
 # TODO: List assumptions in readme
     # Assume space before Doe not intended, or " Doe" was specified in file
+    # Invalid data in any column invalidates the entire row
 
 DEFAULT_WORK_DIR = "work_dir"
 DEFAULT_LOG_LOCATION = "parse_files.log"
@@ -58,12 +63,23 @@ logging.basicConfig(filename=args.log_location, level=numeric_level, format=log_
 
 def main():
     logging.info("Running file parser")
+    create_work_directory(args.work_dir)
     with concurrent.futures.ProcessPoolExecutor() as executor:
         json_files = glob.glob(args.input_dir + "/*")
-        for json_file, work_csv_file in zip(json_files, executor.map(parse_file, json_files)):
-            logging.debug(f"Temporary results for {json_file} stored at {work_csv_file}")
+        csv_files = [f"{args.work_dir}/{os.path.basename(x)}.tmp.csv" for x in json_files]
+        for json_file, csv_file in zip(json_files, executor.map(parse_file, zip(json_files, csv_files))):
+            logging.debug(f"Temporary results for {json_file} stored at {csv_file}")
 
-def parse_file(input_file_location, output_file_location):
+def create_work_directory(work_dir):
+    try:
+        if not os.path.exists(work_dir):
+            os.mkdir(work_dir)
+    except OSError as e:
+        print(f"Creation of work directory {work_dir} failed: {e}")
+        sys.exit(1)
+
+def parse_file(file_locations):
+    input_file_location, output_file_location = file_locations
     fp = FileParser()
     fp.parse_file(input_file_location, output_file_location)
 

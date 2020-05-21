@@ -1,6 +1,7 @@
 import logging
 import json
 import csv
+import shutil
 
 class FileParser:
     def __init__(self):
@@ -20,3 +21,9 @@ class FileParser:
                     date = json_line["data"]["date"]
                     writer.writerow([first_name, last_name, content, date])
         return "somefile"
+
+    def combine_csvs(self, input_csv_file_locs, output_csv_file_loc):
+        with open(output_csv_file_loc, "wb") as output_csv_file:
+            for input_csv_file_loc in input_csv_file_locs:
+                with open(input_csv_file_loc, "rb") as input_csv_file:
+                    shutil.copyfileobj(input_csv_file, output_csv_file)

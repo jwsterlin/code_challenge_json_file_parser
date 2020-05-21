@@ -25,8 +25,6 @@ class TestFileParser(unittest.TestCase):
             file_content = "\n".join(lines)
         self.maxDiff = None
         self.assertEqual(file_content, expected_contents)
-        # print(file_content)
-        # return file_content == expected_contents
 
     def test_full_parse_file(self):
         input_file_loc = "input_files/23222DSR.txt"

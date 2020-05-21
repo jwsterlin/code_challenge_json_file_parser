@@ -2,6 +2,7 @@ import logging
 import json
 import csv
 import shutil
+import io
 
 class FileParser:
     def __init__(self):
@@ -12,7 +13,7 @@ class FileParser:
 
         with open(output_file_location, "w", newline='') as output_file:
             writer = csv.writer(output_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-            with open(input_file_location, "r") as input_file:
+            with open(input_file_location, "r", newline='') as input_file:
                 for line in input_file:
                     json_line = json.loads(line.rstrip())
                     first_name = json_line["person"]["first_name"]
@@ -20,7 +21,6 @@ class FileParser:
                     content = json_line["data"]["content"]
                     date = json_line["data"]["date"]
                     writer.writerow([first_name, last_name, content, date])
-        return "somefile"
 
     def combine_csvs(self, input_csv_file_locs, output_csv_file_loc):
         with open(output_csv_file_loc, "wb") as output_csv_file:

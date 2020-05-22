@@ -3,14 +3,13 @@ import concurrent.futures
 import glob
 import logging
 import os
+import shutil
 import sys
 
 from file_parser.file_parser import FileParser
 
 # TODO: Documentation
 # TODO: Build scripts
-# TODO: Try invalid values for all flag inputs
-# TODO: Check all exit codes
 # TODO: Add comments
 # TODO: List assumptions in readme
     # Assume space before Doe not intended, or " Doe" was specified in file
@@ -79,10 +78,12 @@ def main():
     fp = FileParser()
     fp.combine_csvs(csv_files, args.output_file)
 
+    remove_work_directory(args.work_dir)
     sys.exit(0)
 
 def fail_and_exit(exit_message):
     logging.fatal(exit_message)
+    remove_work_directory(args.work_dir)
     sys.exit(1)
 
 def create_work_directory(work_dir):
@@ -91,6 +92,14 @@ def create_work_directory(work_dir):
             os.mkdir(work_dir)
     except OSError as e:
         fail_and_exit(f"Creation of work directory {work_dir} failed: {e}")
+
+def remove_work_directory(work_dir):
+    logging.debug(f"Removing work directory {work_dir}")
+    try:
+        shutil.rmtree(work_dir, ignore_errors=True)
+    except Exception as e:
+        logging.fatal(f"Removal of work directory {work_dir} failed: {e}")
+        sys.exit(1)
 
 def parse_file(file_locations):
     input_file_location, output_file_location = file_locations

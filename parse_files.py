@@ -64,14 +64,12 @@ def main():
     create_work_directory(args.work_dir)
     json_files = glob.glob(args.input_dir + "/*")
     if len(json_files) == 0:
-        logging.fatal(f"Did not find any input files at {args.input_dir}.  Exiting.")
-        sys.exit(1)
+        fail_and_exit(f"Did not find any input files at {args.input_dir}.  Exiting.")
 
     try:
         open(args.output_file, "w")
     except Exception as e:
-        logging.fatal(f"Could not create an output file at {args.output_file}.  Error: {e}")
-        sys.exit(1)
+        fail_and_exit(f"Could not create an output file at {args.output_file}.  Error: {e}")
 
     csv_files = [f"{args.work_dir}/{os.path.basename(x)}.tmp.csv" for x in json_files]
     with concurrent.futures.ProcessPoolExecutor() as executor:
@@ -81,13 +79,18 @@ def main():
     fp = FileParser()
     fp.combine_csvs(csv_files, args.output_file)
 
+    sys.exit(0)
+
+def fail_and_exit(exit_message):
+    logging.fatal(exit_message)
+    sys.exit(1)
+
 def create_work_directory(work_dir):
     try:
         if not os.path.exists(work_dir):
             os.mkdir(work_dir)
     except OSError as e:
-        print(f"Creation of work directory {work_dir} failed: {e}")
-        sys.exit(1)
+        fail_and_exit(f"Creation of work directory {work_dir} failed: {e}")
 
 def parse_file(file_locations):
     input_file_location, output_file_location = file_locations

@@ -67,6 +67,7 @@ def main():
     fp.combine_csvs(csv_files, args.output_file)
 
     remove_work_directory(args.work_dir)
+    logging.info(f"File parsing complete.  Result file can be found at {args.output_file}")
     sys.exit(0)
 
 def fail_and_exit(exit_message):

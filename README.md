@@ -4,13 +4,13 @@ This JSON file parser was created for an interview coding challenge.  The task w
 ### Sample Input/Output
 Input:
 ```
-{"person":{"first_name":"Rashawn","last_name":"Goldner","address":{"line1":"139 Nicolas Meadows","line2":"Apt. 549","city":"side","state":"ID","zip":"55154"}},"data":{"content":"Eaque eius at. Neque dolorem expedita et est debitis praesentium ipsam. Perspiciatis occaecati quaerat nihil est maiores qui et.","date":"2013-02-07T16:10:14.117-06:00"}}
+{"person":{"first_name":"John","last_name":"Doe","address":{"line1":"123 fake street","line2":"Apt. 549","city":"side","state":"ID","zip":"55154"}},"data":{"content":"Eaque eius at. Neque dolorem expedita et est debitis praesentium ipsam. Perspiciatis occaecati quaerat nihil est maiores qui et.","date":"2013-02-07T16:10:14.117-06:00"}}
 ```
 Output:
 
 First Name,Last Name,Content,Date
 ```
-Rashawn,Goldner,Eaque eius at. Neque dolorem expedita et est debitis praesentium ipsam. Perspiciatis occaecati quaerat nihil est maiores qui et.,2013-02-07T16:10:14.117-06:00
+John,Doe,Eaque eius at. Neque dolorem expedita et est debitis praesentium ipsam. Perspiciatis occaecati quaerat nihil est maiores qui et.,2013-02-07T16:10:14.117-06:00
 ```
 
 ## Installation

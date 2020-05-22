@@ -12,7 +12,6 @@ First Name,Last Name,Content,Date
 ```
 Rashawn,Goldner,Eaque eius at. Neque dolorem expedita et est debitis praesentium ipsam. Perspiciatis occaecati quaerat nihil est maiores qui et.,2013-02-07T16:10:14.117-06:00
 ```
-### Strategy
 
 ## Installation
 Requirements:
@@ -46,6 +45,12 @@ optional arguments:
   -w WORK_DIR, --work_dir WORK_DIR
                         Directory where temporary CSV results will be stored. Defaults to <current_directory>/work_dir.
 ```
+
+For example:
+```
+python3 parse_files.py -i input_files -o output.csv --log_level DEBUG --log_location somelog.log -w myworkdir
+```
+
 ## Assumptions
 Here are some assumptions I made that I would typically bring up with the stakeholder of the project:
 * Assumed that the space before Doe in the original example document was present because " Doe" was specified in file, and was not adding the space myself.

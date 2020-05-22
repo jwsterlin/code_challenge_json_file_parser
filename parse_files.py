@@ -8,8 +8,6 @@ import sys
 
 from file_parser.file_parser import FileParser
 
-# TODO: Add comments
-
 DEFAULT_WORK_DIR = "work_dir"
 DEFAULT_LOG_LOCATION = "parse_files.log"
 DEFAULT_LOG_LEVEL = "INFO"

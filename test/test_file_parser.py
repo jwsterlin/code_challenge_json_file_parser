@@ -78,3 +78,49 @@ Christelle,Franecki,Sit alias sit incidunt dolores id. Quam ex est perspiciatis 
 Linwood,Kuhn,Perferendis perspiciatis tempore ipsam non sed. Tempora sed et. Velit qui omnis ipsam et. Commodi eligendi odio aut.,2013-02-07T16:10:16.900-06:00
 Clementina,Bayer,Cupiditate vitae unde similique. Eaque quaerat et autem minima maiores. Aut voluptatem saepe id dicta et impedit. Magni nesciunt aut sit minima debitis iusto.,2013-02-07T16:10:17.063-06:00"""
         self.file_matches_contents(output_file_loc, expected_contents)
+
+    def test_parse_line(self):
+        fp = FileParser()
+
+        line = '{"person":{"first_name":"A","last_name":"B"},"data":{"content":"C","date":"D"}}'
+        self.assertListEqual(
+            fp.parse_line(line),
+            ["A", "B", "C", "D"],
+            "A line is valid when all four used fields have values"
+        )
+
+        line = '{"person":{"first_name":"A","last_name":"B"},"data":{"content":"C","date":""}}'
+        self.assertIsNone(fp.parse_line(line), "A blank date should fail to parse")
+
+        line = '{"person":{"first_name":"","last_name":"B"},"data":{"content":"C","date":"D"}}'
+        self.assertListEqual(
+            fp.parse_line(line),
+            ["", "B", "C", "D"],
+            "A blank first name is considered valid"
+        )
+
+        line = '{"person":{"last_name":"B"},"data":{"content":"C","date":"D"}}'
+        self.assertIsNone(fp.parse_line(line), "A missing first name should fail to parse")
+
+        line = '{"person":{"first_name":"A"},"data":{"content":"C","date":"D"}}'
+        self.assertIsNone(fp.parse_line(line), "A missing last name should fail to parse")
+
+        line = '{"person":{"first_name":"A","last_name":"B"},"data":{"date":"D"}}'
+        self.assertIsNone(fp.parse_line(line), "A missing content field should fail to parse")
+
+        line = '{"person":{"first_name":"A","last_name":"B"},"data":{"content":"C"}}'
+        self.assertIsNone(fp.parse_line(line), "A missing date should fail to parse")
+
+        line = '{"person":{"first_name":"測試","last_name":"測試"},"data":{"content":"測試","date":"測試"}}'
+        self.assertListEqual(
+            fp.parse_line(line),
+            ["測試", "測試", "測試", "測試"],
+            "Special characters are handled properly"
+        )
+
+        line = '{"person":{"first_name":"Some-Person","last_name":"O\'Reil\\"y"},"data":{"content":"text, with comma.","date":"D"}}'
+        self.assertListEqual(
+            fp.parse_line(line),
+            ["Some-Person", "O'Reil\"y", "text, with comma.", "D"],
+            "Commas and quotes are handled properly"
+        )

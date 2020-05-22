@@ -14,22 +14,49 @@ class FileParser:
         output = io.StringIO()
         writer = csv.writer(output, delimiter=',', quoting=csv.QUOTE_MINIMAL)
         is_first_line = True
+        line_was_valid = True
         with open(input_file_location, "r", newline='') as input_file:
             with open(output_file_location, "w", newline='') as output_file:
                 for line in input_file:
                     if not is_first_line:
-                        output_file.write(output.getvalue().rstrip() + "\n")
+                        if line_was_valid:
+                            output_file.write(output.getvalue().rstrip() + "\n")
                         output.truncate(0)
                         output.seek(0)
                     is_first_line = False
-                    json_line = json.loads(line.rstrip())
-                    first_name = json_line["person"]["first_name"]
-                    last_name = json_line["person"]["last_name"]
-                    content = json_line["data"]["content"]
-                    date = json_line["data"]["date"]
 
-                    writer.writerow([first_name, last_name, content, date])
+                    results = self.parse_line(line)
+                    if results == None:
+                        line_was_valid = False
+                    else:
+                        line_was_valid = True
+                        writer.writerow(results)
                 output_file.write(output.getvalue().rstrip())
+
+    def parse_line(self, line):
+        try:
+            json_line = json.loads(line.rstrip())
+        except Exception as e:
+            logging.warn(f"Couldn't translate line to JSON.  Line: {line}.  Error: {e}")
+            return
+
+        first_name = json_line.get("person", {}).get("first_name")
+        if first_name is None:
+            return
+
+        last_name = json_line.get("person", {}).get("last_name")
+        if last_name is None:
+            return
+
+        content = json_line.get("data", {}).get("content")
+        if content is None:
+            return
+
+        date = json_line.get("data", {}).get("date")
+        if date is None or date == "":
+            return
+
+        return [first_name, last_name, content, date]
 
 
     def combine_csvs(self, input_csv_file_locs, output_csv_file_loc):

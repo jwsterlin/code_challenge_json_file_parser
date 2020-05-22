@@ -52,12 +52,27 @@ args = parser.parse_args()
 
 log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 numeric_level = getattr(logging, args.log_level.upper(), None)
-logging.basicConfig(filename=args.log_location, level=numeric_level, format=log_format)
+
+try:
+    logging.basicConfig(filename=args.log_location, level=numeric_level, format=log_format)
+except Exception as e:
+    print(f"Could not create a log file at {args.log_location}.  Exiting.")
+    sys.exit(1)
 
 def main():
     logging.info("Running file parser")
     create_work_directory(args.work_dir)
     json_files = glob.glob(args.input_dir + "/*")
+    if len(json_files) == 0:
+        logging.fatal(f"Did not find any input files at {args.input_dir}.  Exiting.")
+        sys.exit(1)
+
+    try:
+        open(args.output_file, "w")
+    except Exception as e:
+        logging.fatal(f"Could not create an output file at {args.output_file}.  Error: {e}")
+        sys.exit(1)
+
     csv_files = [f"{args.work_dir}/{os.path.basename(x)}.tmp.csv" for x in json_files]
     with concurrent.futures.ProcessPoolExecutor() as executor:
         for json_file, csv_file in zip(json_files, executor.map(parse_file, zip(json_files, csv_files))):

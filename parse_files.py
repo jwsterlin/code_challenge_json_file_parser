@@ -8,17 +8,7 @@ import sys
 
 from file_parser.file_parser import FileParser
 
-# TODO: Documentation
-# TODO: Build scripts
 # TODO: Add comments
-# TODO: List assumptions in readme
-    # Assume space before Doe not intended, or " Doe" was specified in file
-    # Invalid data in any column invalidates the entire row
-    # Assume no header, per example
-    # Assume trailing newline is unacceptable (more processing required)
-    # Assume total input size ~ several GB to tens of GB.  Recommend trying golang as we move toward terabyte scale.
-    # No advanced validation on names and dates
-    # Incoming double quotes will be escaped as \" in the JSON input file
 
 DEFAULT_WORK_DIR = "work_dir"
 DEFAULT_LOG_LOCATION = "parse_files.log"

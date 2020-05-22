@@ -1,2 +1,5 @@
-# amfam_code_challenge
-AmFam coding challenge
+# JSON File Parser
+## Description
+## Requirements/Installation
+## Running the code
+## Assumptions
